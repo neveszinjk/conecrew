@@ -1,0 +1,16 @@
+# Dockerfile simplificado para Railway usando imagens pré-compiladas
+# Suporta builder e viewer
+
+ARG SCOPE=builder
+
+FROM baptistearno/typebot-${SCOPE}:latest
+
+# Configurar variáveis de ambiente
+ENV PORT=3000
+ENV NODE_ENV=production
+
+# Healthcheck
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+  CMD node -e "require('http').get('http://localhost:3000', (r) => {if (r.statusCode !== 200) throw new Error(r.statusCode)})"
+
+EXPOSE 3000
